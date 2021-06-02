@@ -11,6 +11,10 @@ class killPoints
         class updateHud {};
         class hitMarker {};
         class support {};
-        class civKilled {};
+        class civKilled {};      
+        //Registeres functions for the Bulwark Point bank
+        class updatePointBankAmount {};
+		class depositPointsToPointBank {};
+		class withdrawPointsFromPointBank {};		
     };
 };

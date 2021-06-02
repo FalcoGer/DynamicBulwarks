@@ -1,9 +1,9 @@
-onLoadMission = "dynamicBulwarks";
+onLoadMission = "Defend the Bulwarks until you get bored... Seriously... x)";
 onLoadIntro = "Defend yourself";
-onLoadName = "dynamicBulwarks";
+onLoadName = "SMITH Dynamic Bulwarks";
 briefingName = "dynamicBulwarks";
 overviewText = "Survive by scavenging equipment, in a randomly selected city, against ever increasing waves of hostiles.";
-author = "Hilltop & omNomios";
+author = "Hilltop & omNomios EDITED BY: SMITH";
 overviewPicture = "preview.paa";
 
 loadScreen = "preview.paa";
@@ -14,7 +14,7 @@ respawnDialog = 0;
 respawnTemplates[] = {"Base"};
 ReviveMode = 1;
 ReviveRequiredItems = 2;
-ReviveBleedOutDelay = 120;
+ReviveBleedOutDelay = 600;
 
 corpseManagerMode = 2;
 corpseLimit = 5;
@@ -26,21 +26,21 @@ wreckRemovalMaxTime = 50;
 
 class Header
 {
-	gameType   = Defend;
-	minPlayers = 1;
-	maxPlayers = 25;
+	gameType =  Coop;
+	minPlayers =  	 1;
+	maxPlayers = 	  25;
 };
 
 class CfgFunctions
 {
-	#include "score\functions.hpp"
-	#include "supports\functions.hpp"
-	#include "bulwark\functions.hpp"
-	#include "sound\functions.hpp"
-	#include "area\functions.hpp"
-	#include "build\functions.hpp"
-	#include "hostiles\functions.hpp"
-	#include "loot\functions.hpp"
+	#include "score\Functions.hpp"
+	#include "supports\Functions.hpp"
+	#include "bulwark\Functions.hpp"
+	#include "sound\Functions.hpp"
+	#include "area\Functions.hpp"
+	#include "build\Functions.hpp"
+	#include "hostiles\Functions.hpp"
+	#include "loot\Functions.hpp"
 };
 
 
@@ -62,7 +62,12 @@ class CfgRemoteExec
 		class ragePack {};
 		class say3DGlobal {};
 		class createBlur {};
-		class suiExplode{};
+		class suiExplode{};	
+		// New function to be executed using remoteExec
+		class updatePointBankAmount {};
+		class depositPointsToPointBank {};
+		class withdrawPointsFromPointBank {};
+		class livesTicket {};
 	};
 };
 
@@ -103,6 +108,63 @@ class CfgCommunicationMenu
 class CfgSounds
 {
 	sounds[] = {boxSpin, rageSound};
+	
+	class withDrawPoint
+	{
+		name = "Withdraw points";
+		sound[] = {"\sound\point_withdraw.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class depositPoint
+	{
+		name = "Deposit points";
+		sound[] = {"\sound\point_deposit.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addOneLives
+	{
+		name = "Add 1 Ticket";
+		sound[] = {"\sound\add1lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addTwoLives
+	{
+		name = "Add 2 Ticket";
+		sound[] = {"\sound\add2lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addThreeLives
+	{
+		name = "Add 3 Ticket";
+		sound[] = {"\sound\add3lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addFiveLives
+	{
+		name = "Add 5 Ticket";
+		sound[] = {"\sound\add5lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addTenLives
+	{
+		name = "Add 10 Ticket";
+		sound[] = {"\sound\add10lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
+	class addTwentyLives
+	{
+		name = "Add 20 Ticket";
+		sound[] = {"\sound\add20lives.ogg", 1, 1, 100};
+		titles[] = {0,""};
+	};
+	
 	class boxSpin
 	{
 		name = "Gambling box sound";
@@ -180,11 +242,35 @@ class CfgNotifications
 	};
 };
 
+#include "bulwark\dialogNew.hpp"
 #include "bulwark\dialog.hpp"
-
 
 class Params
 {
+	class POINT_BANK_INIT_AMOUNT
+	{
+		title = "The initial amount of kill point in the Bulwark";
+		values[] = {0, 3000, 5000, 7500, 10000, 15000, 20000, 35000, 50000, 75000, 100000, 200000, 500000};
+		texts[] = {"0", "3000", "5000", "7500", "10000", "15000", "20000", "35000", "50000", "75000", "100000", "200000", "500000"};
+		default = 35000;
+	};
+	
+	class MAX_POINT_BANK_DEPOSIT_AMOUNT
+	{
+		title = "Maximum amount of kill point that player can deposit to the point bank";
+		values[] = {10000, 20000, 30000, 40000, 50000};
+		texts[] = {"10000", "20000", "30000", "40000", "50000"};
+		default = 50000;
+	};
+	
+	class MAX_POINT_BANK_WITHDRAW_AMOUNT
+	{
+		title = "Maximum amount of kill point that player can withdraw from the point bank";
+		values[] = {10000, 20000, 30000, 40000, 50000};
+		texts[] = {"10000", "20000", "30000", "40000", "50000"};
+		default = 50000;
+	};
+	
 	class HOSTILE_LABEL
 	{
 		title = "======= Wave Settings =======";
@@ -198,7 +284,7 @@ class Params
 		title = "Number of hostiles per wave";
 		values[] = {0.5,1,2,3};
 		texts[] = {"Low (Easiest)", "Normal", "Double", "Tripple (Hardest)"};
-		default = 1;
+		default = 2;
 	};
 
 	class HOSTILE_TEAM_MULTIPLIER
@@ -230,7 +316,7 @@ class Params
 		title = "Time between rounds";
 		values[] = {0, 15, 30, 60, 90, 120, 180, 240, 300};
 		texts[] = {"0", "15 Seconds", "30 Seconds", "1 Minute", "1 Minute 30 Seconds", "2 Minutes", "3 Minutes", "4 Minutes", "5 Minutes"};
-		default = 60;
+		default = 120;
 	};
 
 	class MAX_WAVES
@@ -326,7 +412,7 @@ class Params
 		title = "Mission area size";
 		values[] = {50, 100, 150, 200, 250};
 		texts[] = {"(50m) Tiny", "(100m) Small", "(150m) Normal", "(200m) Large", "(250m) Huge"};
-		default = 150;
+		default = 200;
 	};
 
 	class BULWARK_MINSIZE
@@ -358,7 +444,7 @@ class Params
 		title = "Loot distribution";
 		values[] = {1, 2, 3, 4};
 		texts[] = {"Every building", "Every second building", "Every third building", "Every fourth building"};
-		default = 2;
+		default = 1;
 	};
 
 	class LOOT_ROOM_DISTRIBUTION
@@ -366,7 +452,7 @@ class Params
 		title = "Loot density";
 		values[] = {1, 2, 3, 4};
 		texts[] = {"Every location", "Every second location", "Every third location", "Every fourth location"};
-		default = 2;
+		default = 1;
 	};
 
 	class LOOT_SUPPLYDROP
@@ -412,8 +498,8 @@ class Params
 	class START_KILLPOINTS
 	{
 		title = "Kill points players start with";
-		values[] = {0, 250, 500, 1000, 2500, 5000, 10000};
-		texts[] = {"0", "250", "500", "1000", "2500", "5000", "10000"};
+		values[] = {0, 250, 500, 1000, 2500, 5000, 10000, 20000, 40000, 50000, 100000, 500000};
+		texts[] = {"0", "250", "500", "1000", "2500", "5000", "10000", "20000", "40000", "50000", "100000", "500000"};
 		default = 0;
 	};
 
@@ -422,7 +508,7 @@ class Params
 		title = "Find Satellite Dish to Unlock Supports";
 		values[] = {0, 1};
 		texts[] = {"No, Supports are available from the begining of the mission", "Yes, find the Satellite Dish to unlock the Support Menu"};
-		default = 1;
+		default = 0;
 	};
 
 	class SCORE_KILL
@@ -438,7 +524,7 @@ class Params
 		title = "Points per hit";
 		values[] = {0, 10, 20, 50, 100};
 		texts[] = {"0","10","20","50","100"};
-		default = 20;
+		default = 10;
 	};
 
 	class SCORE_DAMAGE_BASE
@@ -497,7 +583,7 @@ class Params
 		title = "Tickets";
 		values[] = {0, 5, 10, 15, 20};
 		texts[] = {"0", "5", "10", "15", "20"};
-		default = 0;
+		default = 20;
 	};
 
 	class RESPAWN_TIME

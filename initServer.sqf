@@ -1,6 +1,8 @@
 // variable to prevent players rejoining during a wave
+// EDITED BY: SMITH
 playersInWave = [];
 publicVariable "playersInWave";
+missionNamespace setVariable ["buildPhase", true, true];
 
 ["<t size = '.5'>Loading lists.<br/>Please wait...</t>", 0, 0, 10, 0] remoteExec ["BIS_fnc_dynamicText", 0];
 _hLocation = [] execVM "locationLists.sqf";
@@ -34,6 +36,10 @@ publicVariable "RESPAWN_TIME";
 publicVariable "PLAYER_OBJECT_LIST";
 publicVariable "MIND_CONTROLLED_AI";
 publicVariable "SCORE_RANDOMBOX";
+
+//*Don't know if this was a good idea or not, but hey... it works!!! LOL  SMITH...*/
+publicVariable "MAX_POINT_BANK_DEPOSIT_AMOUNT";
+publicVariable "MAX_POINT_BANK_WITHDRAW_AMOUNT";
 
 //determine if Support Menu is available
 _supportParam = ("SUPPORT_MENU" call BIS_fnc_getParamValue);

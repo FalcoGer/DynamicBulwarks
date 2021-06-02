@@ -4,7 +4,19 @@
 *  Defines all global config for the mission
 *
 *  Domain: Client, Server
+* 
+*  Edited By: SMITH
 **/
+
+/*New feature added: Point Bank!!
+ This variable holds the amount of kill point deposited by the players
+*/
+POINT_BANK_INIT_AMOUNT 		   = ("POINT_BANK_INIT_AMOUNT" call BIS_fnc_getParamValue);
+MAX_POINT_BANK_DEPOSIT_AMOUNT  = ("MAX_POINT_BANK_DEPOSIT_AMOUNT" call BIS_fnc_getParamValue);
+MAX_POINT_BANK_WITHDRAW_AMOUNT = ("MAX_POINT_BANK_WITHDRAW_AMOUNT" call BIS_fnc_getParamValue);
+
+/* Variable to check category open*/
+CAT_OPEN = 0;
 
 /* Attacker Waves */
 
@@ -95,51 +107,144 @@ HOSTILE_CAR_POINT_SCORE = 2;
 HOSTILE_ARMOUR_POINT_SCORE = 4;
 
 /* Comment out or delete the below support items to prevent the player from buying them */
+/* Category type for the last index*/
 
 BULWARK_SUPPORTITEMS = [
-    [800,  "Recon UAV",             "reconUAV"],
-    [1680, "Emergency Teleport",   "telePlode"],
-    [1950, "Paratroopers",          "paraDrop"],
-    [3850, "Missile CAS",          "airStrike"],
-    [4220, "Mine Cluster Shell",   "mineField"],
-    [4690, "Rage Stimpack",         "ragePack"],
-    [5930, "Mind Control Gas",    "mindConGas"],
-    [6666, "ARMAKART TM",           "armaKart"],
-    [7500, "Predator Drone",    "droneControl"]
+	[2500,  "+1  Ticket",              "+1",  		  8001, 0],
+	[4500,  "+2  Tickets",             "+2",  		  8002, 0],
+	[6000,  "+3  Tickets",             "+3",  		  8003, 0],
+	[9000,  "+5  Tickets",             "+5",  		  8004, 0],
+	[15000, "+10 Tickets",             "+10", 		  8005, 0],
+	[20000, "+20 Tickets",             "+20", 		  8006, 0],
+    [800,   "Recon UAV",               "reconUAV",    8007, 1],
+    [1680,  "Emergency Teleport",      "telePlode",   8008, 1],
+    [1950,  "Paratroopers",            "paraDrop",    8009, 1],
+    [3850,  "Missile CAS",             "airStrike",   8010, 1],
+    [4220,  "Mine Cluster Shell",      "mineField",   8011, 1],
+    [4690,  "Rage Stimpack",           "ragePack",    8012, 1],
+    [5930,  "Mind Control Gas",        "mindConGas",  8013, 1],
+    [6666,  "ARMAKART TM",             "armaKart",    8014, 1],
+    [7500,  "Predator Drone",          "droneControl",8015, 1]
 ];
 
 /* Objects the Player can buy */
 
 /* Radius prevents hostiles walking through objects */
 
-/*  Price - Display Name - Class Name - Rotation When Bought - Object Radius (meters) *prevents AI glitching through object and triggers suicide bombers*/
+/* - Price
+   - Display Name 
+   - Class Name 
+   - Rotation When Bought
+   - Object Radius (meters) *prevents AI glitching through object and triggers suicide bombers 
+   - Has AI true/false (for objects with AI like autonomous turrests)
+   - Category Number 0 Building / Platforms, 1 Bunkers / Barricades, 2 Walls / Barbwires
+   3 Ramps / Stairs, 4 Bridges / Ladder, 5 Tank Traps, 6 Sentries, 7 Vehicles
+   
+   */  
 BULWARK_BUILDITEMS = [
-    [25,   "Long Plank (8m)",      "Land_Plank_01_8m_F",                0,   4],
-    [50,   "Junk Barricade",       "Land_Barricade_01_4m_F",            0, 1.5],
-    [75,   "Small Ramp (1m)",      "Land_Obstacle_Ramp_F",            180, 1.5],
-    [85,   "Flat Triangle (1m)",   "Land_DomeDebris_01_hex_green_F",  180, 1.5],
-    [100,  "Short Sandbag Wall",   "Land_SandbagBarricade_01_half_F",   0, 1.5],
-    [150,  "Sandbag Barricade",    "Land_SandbagBarricade_01_hole_F",   0, 1.5],
-    [180,  "Concrete Shelter",     "Land_CncShelter_F",                 0,   1],
-    [200,  "Concrete Walkway",     "Land_GH_Platform_F",                0, 3.5],
-    [250,  "Tall Concrete Wall",   "Land_Mil_WallBig_4m_F",             0,   2],
-    [260,  "Portable Light",       "Land_PortableLight_double_F",     180,   1],
-    [300,  "Long Concrete Wall",   "Land_CncBarrierMedium4_F",          0,   3],
-    [400,  "Large Ramp",           "Land_VR_Slope_01_F",                0,   4],
-    [500,  "Bunker Block",         "Land_Bunker_01_blocks_3_F",         0,   2],
-    [500,  "H Barrier",            "Land_HBarrier_3_F",                 0,   2],
-    [750,  "Ladder",               "Land_PierLadder_F",                 0,   1],
-    [800,  "Storage box small",    "Box_NATO_Support_F",                0,   1],
-    [950,  "Stairs",               "Land_GH_Stairs_F",                180,   4],
-    [1000, "Hallogen Lamp",        "Land_LampHalogen_F",               90,   1],
-    [1000, "Double H Barrier",     "Land_HBarrierWall4_F",              0,   4],
-    [1000, "Concrete Platform",    "BlockConcrete_F",                   0, 3.5],
-    [1200, "Storage box large",    "Box_NATO_AmmoVeh_F",                0,   1],
-    [2500, "Static HMG",           "B_HMG_01_high_F",                   0,   1],
-    [3000, "Small Bunker",         "Land_BagBunker_Small_F",          180,   3],
-    [4500, "Pillbox",              "Land_PillboxBunker_01_hex_F",      90, 2.5],
-    [6000, "Guard Tower",          "Land_Cargo_Patrol_V3_F",            0, 3.5],
-    [9500, "Modular Bunker",       "Land_Bunker_01_Small_F",          180, 3.5]
+	[25,    "Long Plank (8m)",        "Land_Plank_01_8m_F",                 	 0,   4, false, 0, 1],
+    [65,    "Flat Triangle (1m)",     "Land_DomeDebris_01_hex_green_F",   	   180, 1.5, false, 0, 2],  
+    [75,    "Long Net",               "CamoNet_INDP_F",                     	 0, 1.5, false, 0, 3],
+	[80,    "Medium Net",             "CamoNet_OPFOR_open_F",               	 0,   2, false, 0, 4],	
+    [85,    "Big Net",                "CamoNet_OPFOR_big_F",                	 0,   2, false, 0, 5],
+	[260,   "Portable Light",         "Land_PortableLight_double_F",      	   180,   1, false, 0, 6],
+	[1000,  "Hallogen Lamp",          "Land_LampHalogen_F",                	 	90,   1, false, 0, 7],
+	[1110,  "Concrete Platform",      "BlockConcrete_F",                    	 0, 3.5, false, 0, 8],
+	[4600,  "Foundation Open",        "Land_i_Addon_04_V1_F",               	 0, 6.5, false, 0, 9],
+	[5100,  "Foundation End",         "Land_i_Addon_03_V1_F", 			    	 0, 6.5, false, 0, 10],
+	[5100,  "Foundation Mid",		  "Land_i_Addon_03mid_V1_F",				 0, 6.5, false, 0, 11],
+    [6000,  "Guard Tower",            "Land_Cargo_Patrol_V3_F",             	 0, 3.5, false, 0, 12],
+    [6500,  "Reservior Tower",        "Land_ReservoirTower_F",  	        	 0,   6, false, 0, 13],
+	[6800,  "Half Metal Shelter",     "Land_MetalShelter_01_F",             	 0,   5, false, 0, 14],
+	[7300,  "Metal Shelter",      	  "Land_MetalShelter_02_F",             	 0,   6, false, 0, 15],
+	[8650,  "Castle Tower",           "Land_Castle_01_tower_F",             	 0,   6, false, 0, 16],
+	[8700,  "Light House",            "Land_LightHouse_F",                  	 0, 7.5, false, 0, 17],
+	[8900,  "Cargo House",			  "Land_Cargo_House_V1_F",			  	   180, 6.5, false, 0, 18],
+	[9500,  "Cargo HQ",				  "Land_Cargo_HQ_V1_F",				  	   180, 6.5, false, 0, 19],    
+	[9700,  "Cargo Patrol",			  "Land_Cargo_Patrol_V1_F",			  	   180, 6.5, false, 0, 20],
+    [9800,  "Cargo Tower",            "Land_Cargo_Tower_V1_F",            	   180,   8, false, 0, 21],
+	[10000, "Large Metal Shelter",    "Land_SM_01_shelter_wide_F",          	 0,   7, false, 0, 22],
+	[12550, "Smith's House LOL xD",   "Land_Unfinished_Building_01_F",    	     0,   9, false, 0, 23],
+	[50,    "Junk Barricade",         "Land_Barricade_01_4m_F",             	 0, 1.5, false, 1, 24],
+	[90,	"Sandbag End",			  "Land_BagFence_End_F",					 0, 1.5, false, 1, 25],	
+    [95,	"Sandbag Corner",		  "Land_BagFence_Corner_F",			    	 0, 1.5, false, 1, 26],	
+	[100,	"Sandbag Short",		  "Land_BagFence_Short_F",			    	 0, 1.5, false, 1, 27],
+	[105,	"Sandbag Long",			  "Land_BagFence_Long_F",					 0, 1.5, false, 1, 28],
+	[110, 	"Sandbag Round",		  "Land_BagFence_Round_F",			       180, 1.5, false, 1, 29],
+	[120,   "Sandbag Wall",     	  "Land_SandbagBarricade_01_half_F",    	 0, 1.5, false, 1, 30],    
+	[125,   "Sandbag Barricade",      "Land_SandbagBarricade_01_hole_F",    	 0, 1.5, false, 1, 31],
+	[400,   "Pillbox Bunker",         "Land_PillboxBunker_01_rectangle_F",  	90,   3, false, 1, 32],
+	[450,   "H Barrier x1",		      "Land_HBarrier_1_F",				    	 0,   2, false, 1, 33],
+    [450,   "H Barrier x3",           "Land_HBarrier_3_F",                  	 0,   2, false, 1, 34],
+	[450,   "H Barrier x5",		      "Land_HBarrier_5_F",				    	 0,   2, false, 1, 35],
+    [500,   "Bunker Block",           "Land_Bunker_01_blocks_3_F",          	 0,   2, false, 1, 36],	
+	[1000,  "D-H Barrier 4",       	  "Land_HBarrierWall4_F",               	 0,   4, false, 1, 37],
+	[1000,  "D-H Barrier Corner",	  "Land_HBarrierWall_corner_F",              0, 4.5, false, 1, 38],
+	[1050,  "Big H Barrier",          "Land_HBarrierBig_F",				    	 0,   4, false, 1, 39],
+/**/[1050,  "D-H Barrier 6",          "Land_HBarrierWall6_F",                    0, 4.5, false, 1, 40],
+	[1100,  "D-H Barrier Corridor",   "Land_HBarrierWall_corridor_F",           90,   5, false, 1, 41],/**/
+	[2050,  "Small Bunker",           "Land_BagBunker_Small_F",           	   180,   3, false, 1, 42],
+	[4250,  "H Barrier Tower",        "Land_HBarrierTower_F",                  180, 7.5, false, 1, 43],
+    [4500,  "Pillbox",                "Land_PillboxBunker_01_hex_F",       		90, 2.5, false, 1, 44],
+	[8500,  "Modular Bunker",         "Land_Bunker_01_Small_F",           	   180, 3.5, false, 1, 45],
+    [8500,  "Bag Bunker Tower",       "Land_BagBunker_Tower_F",             	 0,   5, false, 1, 46],
+	[130,   "Razorwire",              "Land_Razorwire_F",				    	 0, 1.5, false, 2, 47],	
+	[135,   "Wired Fence",	 		  "Land_Mil_WiredFence_F",			    	 0, 1.2, false, 2, 48],
+	[140,   "Wired Fence 10m",	      "Land_New_WiredFence_10m_F",		    	 0,   3, false, 2, 49],
+	[150,   "Concrete Pillar",        "Land_City_Pillar_F",				    	 0,   2, false, 2, 50],
+	[155,   "Concrete fence 4m",	  "Land_City2_4m_F",				    	 0,   2, false, 2, 51],
+	[155,   "Concrete fence 8m",      "Land_City_8m_F",					    	 0,   3, false, 2, 52],
+	[160,   "Concrete Barrier",       "Land_CncBarrier_stripes_F",		    	 0,   1, false, 2, 53],
+	[170,   "Concrete Walkway",       "Land_GH_Platform_F",                 	 0, 3.5, false, 2, 54],
+    [170,   "Concrete Shelter",       "Land_CncShelter_F",                  	 0,   1, false, 2, 55], 
+    [200,   "Concrete Wall Low 4m",   "Land_Concrete_SmallWall_4m_F",       	 0,   2, false, 2, 56],
+    [225,   "Concrete Wall Low 8m",	  "Land_Concrete_SmallWall_8m_F",       	 0,   2, false, 2, 57],	
+	[250,   "Wide Concrete Wall",     "Land_CncWall4_F",                    	 0,   2, false, 2, 58],
+    [250,   "High Concrete Wall",     "Land_Mil_WallBig_4m_F",              	 0,   2, false, 2, 59],
+    [300,   "Long Concrete Wall",     "Land_CncBarrierMedium4_F",           	 0,   3, false, 2, 60],
+	[315,   "Pillbox Round Wall 3m",  "Land_PillboxWall_01_3m_round_F",     	 0, 1.5, false, 2, 61],
+	[315,   "Pillbox Wall 3m",        "Land_PillboxWall_01_3m_F",           	 0, 1.5, false, 2, 62],
+	[385,   "Pillbox Round Wall 6m",  "Land_PillboxWall_01_6m_round_F",     	 0, 2.5, false, 2, 63],
+	[385,   "Pillbox Wall 6m",        "Land_PillboxWall_01_6m_F",           	 0, 2.5, false, 2, 64],
+	[3200,  "Canal Wall 10m",		  "Land_Canal_Wall_10m_F",			    	 0, 3.5, false, 2, 65],
+    [3400,  "Canal Wall Stairs", 	  "Land_Canal_Wall_Stairs_F",		    	 0, 3.5, false, 2, 66], 
+    [60,    "Small Ramp (1m)",        "Land_Obstacle_Ramp_F",             	   180, 1.5, false, 3, 67],
+    [425,   "Low Ramp",               "Land_RampConcrete_F",                	 0,   7, false, 3, 68],
+	[450,   "High Ramp",              "Land_RampConcreteHigh_F",            	 0,   5, false, 3, 69],	
+	[950,   "Stairs",                 "Land_GH_Stairs_F",                 	   180,   4, false, 3, 70],
+	[750,   "Ladder",                 "Land_PierLadder_F",                  	 0,   1, false, 4, 71],
+	[1500,  "Small Metal Bridge",     "Land_Walkover_01_F",                 	 0,   4, false, 4, 72],
+	[140,	"Dragons Teeth", 		  "Land_DragonsTeeth_01_1x1_new_F",     	 0,   1, false, 5, 73],
+	[140,   "Dragons Teeth (Red)",    "Land_DragonsTeeth_01_1x1_new_redwhite_F", 0,   1, false, 5, 74],
+	[145,   "Tank Trap",              "Land_CzechHedgehog_01_new_F",        	 0,   1, false, 5, 75],
+	[1120,  "Dragon Teeth x8",        "Land_DragonsTeeth_01_4x2_new_F",     	 0, 3.5, false, 5, 76],
+	[1120,  "Dragon Teeth (Red) x8",  "Land_DragonsTeeth_01_4x2_new_redwhite_F", 0, 3.5, false, 5, 77],
+	[800,   "Storage box small",      "Box_NATO_Support_F",                 	 0,   1, false, 6, 78],
+	[850,   "Russian storage box",    "Box_IND_WpsSpecial_F",		        	 0,   1, false, 6, 79],
+    [1200,  "Storage Box Large",      "Box_NATO_AmmoVeh_F",                 	 0,   1, false, 6, 80],
+    [2250,  "Mk30 HMG (High)",        "B_HMG_01_high_F",                    	 0,   1, false, 6, 81],
+	[2250,  "Mk30 HMG (Low)",         "I_HMG_01_F",						    	 0,   1, false, 6, 82],
+	[2600,  "50Cal HMG (High)",       "I_E_HMG_02_high_F",                  	 0,   1, false, 6, 83],
+	[2600,  "50Cal HMG (Low)",        "I_E_HMG_02_F",                       	 0,   1, false, 6, 84],
+	/*[2800,  "DShKM",				  "CUP_DShKM_mg2",					         0,   1, false, 6, 85],*/
+	[2950,  "Mk32 GMG (High)",        "I_GMG_01_high_F",			        	 0,   1, false, 6, 85],
+	[2950,  "Mk32 GMG (Low)",         "I_GMG_01_F",						    	 0,   1, false, 6, 86],    
+    [7900,  "Mk30 Auto HMG",          "B_HMG_01_A_F",                     	   180, 3.5,  true, 6, 87],
+	[8200,  "Mk6 82mm Morta",		  "O_Mortar_01_F",                      	 0,   1, false, 6, 88],
+	[20,    "Helipad Marker",         "Land_HelipadSquare_F",               	 0,   3, false, 7, 89],	
+	[11500, "UGV Stomper RCWS",       "I_UGV_01_rcws_F",                    	 0,   3, false, 7, 90],	
+	[11500, "UGV Saif RCWS",		  "O_UGV_01_rcws_F",						 0,   3, false, 7, 91],
+	[11500, "NATO UGV RCWS",  	      "B_UGV_01_rcws_F",                    	 0,   3, false, 7, 92],	
+	[13500, "MH-9 Hummingbird", 	  "B_Heli_Light_01_F", 				    	 0, 4.5, false, 7, 93],
+	[17300, "FV-720 Mora",            "I_APC_tracked_03_cannon_F",          	 0, 5.5, false, 7, 94],
+	[17900, "AH-9 Pawnee",            "B_Heli_Light_01_armed_F",            	 0, 4.5, false, 7, 95],	
+	[19000, "AFV-4 Gorgon",           "I_APC_Wheeled_03_cannon_F",          	 0, 6.5, false, 7, 96],
+	[21550, "WY-55 Hellcat",          "I_Heli_light_03_F",                  	 0, 6.5, false, 7, 97],
+	[22650, "BTR-K Kamysh",           "O_APC_Tracked_02_cannon_F",          	 0, 6.5, false, 7, 98],
+	[25800, "ZSU-39 Tigris",		  "O_APC_Tracked_02_AA_F",              	 0, 6.5, false, 7, 99],
+	[29900, "T-100 Varsuk",           "O_MBT_02_cannon_F",                  	 0, 6.5, false, 7, 100],
+	[35200, "MBT-52 Kuma",            "I_MBT_03_cannon_F",				    	 0, 6.5, false, 7, 101],	
+	[38500, "Mi-48 Kajman",           "O_Heli_Attack_02_black_F",           	 0, 7.5, false, 7, 102]
 ];
 
 /* Time of Day*/
